@@ -6,7 +6,9 @@ const tours = JSON.parse(
 );
 
 //checkID middleware
-exports.checkID = (req, res, next, val) => {
+const checkID = (req, res, next, val) => {
+  console.log(`Tour id is: ${val}`);
+
   if (req.params.id * 1 > tours.length) {
     return res.status(404).json({
       status: 'fail',
@@ -16,6 +18,16 @@ exports.checkID = (req, res, next, val) => {
   next();
 };
 
+//checkBody middleware
+const checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Missing name or price',
+    });
+  }
+  next();
+};
 const getAllTours = (req, res) => {
   console.log('req.requestTime', req.requestTime);
   res.status(200).json({
@@ -91,6 +103,8 @@ const deleteTour = (req, res) => {
 };
 
 module.exports = {
+  checkID,
+  checkBody,
   getAllTours,
   getTour,
   createTour,

@@ -1,3 +1,14 @@
+//checkID middleware
+exports.checkUser = (req, res, next, val) => {
+  if (req.params.user * 1 > user.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid user',
+    });
+  }
+  next();
+};
+
 const getAllUsers = (req, res) => {
   res.status(500).json({
     status: 'error',
