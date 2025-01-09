@@ -1,5 +1,7 @@
 //checkID middleware
-exports.checkUser = (req, res, next, val) => {
+const checkUser = (req, res, next, val) => {
+  console.log(`user id is: ${val}`);
+
   if (req.params.user * 1 > user.length) {
     return res.status(404).json({
       status: 'fail',
@@ -50,4 +52,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  checkUser,
 };
