@@ -5,13 +5,12 @@ const {
   createTour,
   updateTour,
   deleteTour,
-  checkID,
   checkBody,
 } = require('../controllers/tourController');
 
 const router = express.Router();
 
-router.param('id', checkID);
+// router.param('id');
 //this is a middleware that only runs for the route with /api/v1/tours, not users!
 
 router.route('/').get(getAllTours).post(checkBody, createTour); // the route is the root
