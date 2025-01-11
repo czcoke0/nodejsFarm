@@ -1,16 +1,6 @@
 //handlers are controller functions
 const Tour = require('./../models/tourModel');
 
-//checkBody middleware
-const checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Missing name or price',
-    });
-  }
-  next();
-};
 const getAllTours = (req, res) => {
   console.log('req.requestTime', req.requestTime);
   // res.status(200).json({
@@ -38,25 +28,23 @@ const getTour = (req, res) => {
   // });
 };
 
-const createTour = (req, res) => {
-  // const newId = tours[tours.length - 1].id + 1;
-  // const newTour = Object.assign({ id: newId }, req.body);
-  // tours.push(newTour);
-  // console.log('req.body', req.body);
-  // fs.writeFile(
-  //   `${__dirname}/dev-data/data/tours-simple.json`,
-  //   JSON.stringify(tours),
-  //   (err) => {
-  //     res.status(201).json({
-  //       status: 'success',
-  //       data: {
-  //         tour: newTour,
-  //       },
-  //     });
-  //   },
-  // );
-};
+const createTour = async (req, res) => {
+  try {
+    const newTour = await Tour.create(req.body); //tour.create is a promise
 
+    res.status(201).json({
+      status: 'success',
+      data: {
+        tour: newTour,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
 const updateTour = (req, res) => {
   // fs.writeFile(
   //   `${__dirname}/dev-data/data/tours-simple.json`,
@@ -86,7 +74,6 @@ const deleteTour = (req, res) => {
 };
 
 module.exports = {
-  checkBody,
   getAllTours,
   getTour,
   createTour,
