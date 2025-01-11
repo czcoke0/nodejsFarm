@@ -1,31 +1,40 @@
 //handlers are controller functions
 const Tour = require('./../models/tourModel');
 
-const getAllTours = (req, res) => {
-  console.log('req.requestTime', req.requestTime);
-  // res.status(200).json({
-  //   status: 'success',
-  //   requestedAt: req.requestTime,
-  //   results: tours.length,
-  //   data: {
-  //     tours,
-  //   },
-  // });
+const getAllTours = async (req, res) => {
+  try {
+    const tours = await Tour.find();
+    res.status(200).json({
+      status: 'success',
+      results: tours.length,
+      data: {
+        tours,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
 
-const getTour = (req, res) => {
-  // const id = req.params.id * 1;
-  // const tour = tours.find((el) => el.id === id); //change a string to number
-  console.log(req.params);
-
-  // const id = tours.find((el) => el.id === id);
-  // res.status(200).json({
-  //   status: 'success',
-  //   results: tours.length,
-  //   data: {
-  //     tour,
-  //   },
-  // });
+const getTour = async (req, res) => {
+  try {
+    const tour = await Tour.findById(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+    console.log(req.params);
+  }
 };
 
 const createTour = async (req, res) => {
