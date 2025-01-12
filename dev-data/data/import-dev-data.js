@@ -1,7 +1,8 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Tour = require('./../../models/tourModel');
+const Tour = require('../../models/tourModel');
+
 dotenv.config({ path: './config.env' }); //read the config file and save it to the environment variable; order is important need to read the config file first then the app file
 
 const DB = process.env.DATABASE;

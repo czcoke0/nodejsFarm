@@ -1,9 +1,24 @@
 //handlers are controller functions
-const Tour = require('./../models/tourModel');
+const Tour = require('../models/tourModel');
 
 const getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    // const tours = await Tour.find({
+    //   duration: 599,
+    //   difficulty: 'easy',
+    // });
+    //Build the query
+    const queryObj = { ...req.query };
+    const excludedFields = ['page', 'sort', 'limit', 'fields']; //fields that are not part of the query
+    excludedFields.forEach((el) => delete queryObj[el]);
+    console.log(req.query, queryObj); //{ duration: '5', page: '1' } { duration: '5' }
+
+    //solution
+    const query = Tour.find(req.query);
+
+    //Execute the query
+    const tours = await query;
+    //send response
     res.status(200).json({
       status: 'success',
       results: tours.length,
