@@ -9,18 +9,27 @@ const getAllTours = async (req, res) => {
     //   difficulty: 'easy',
     // });
     //Build the query
-    //1) Filtering
+    //1A) Filtering
     const queryObj = { ...req.query };
     const excludedFields = ['page', 'sort', 'limit', 'fields']; //fields that are not part of the query
     excludedFields.forEach((el) => delete queryObj[el]);
     // console.log(req.query, queryObj); //{ duration: '5', page: '1' } { duration: '5' }
 
-    //2)advanced filtering
+    //1B)advanced filtering
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`); //b is for word boundary,g is for global, t is for time, e is for end
 
     //solution
-    const query = Tour.find(JSON.parse(queryStr));
+    let query = Tour.find(JSON.parse(queryStr));
+
+    //2) Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
+
     //Execute the query
     const tours = await query;
     //send response
