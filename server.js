@@ -14,8 +14,6 @@ const DB = process.env.DATABASE.replace(
 mongoose
   .connect(DB, {
     dbName: 'natours',
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
   })
   .then(() => console.log('DB connection successful!'))
   .catch((err) => {
