@@ -1,0 +1,27 @@
+version: '3'
+
+vars:
+  IMAGE_NAME: cz-natours-app
+  REGISTRY: r.hansdog.dev
+
+tasks:
+  run:
+    desc: 'start the dev server'
+    cmds:
+      - nodemon server.js
+
+  image:
+    desc: 'Build the Docker image'
+    cmds:
+      - docker build -t {{.IMAGE_NAME}} .
+
+  push:
+    desc: 'Push the Docker image to the registry'
+    cmds:
+      - docker tag {{.IMAGE_NAME}} {{.REGISTRY}}/{{.IMAGE_NAME}}:latest
+      - docker push {{.REGISTRY}}/{{.IMAGE_NAME}}:latest
+
+  imagerun:
+    desc: 'run docker container from local to image'
+    cmds:
+      - docker run --rm --name {{.IMAGE_NAME}} -p 3000:3000 {{.IMAGE_NAME}}
