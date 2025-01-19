@@ -38,3 +38,8 @@ tasks:
       - task: image
       - task: push
       - 'curl -H "Authorization: Bearer lbuHehLxXpWdmpWhEoX4" 10.0.0.4:5050/v1/update'
+
+  debug:
+    desc: 'Debug local'
+    cmds:
+      - ndb server.js
