@@ -12,16 +12,29 @@ tasks:
 
   image:
     desc: 'Build the Docker image'
+    preconditions:
+      - sh: docker version
     cmds:
       - docker build -t {{.IMAGE_NAME}} .
 
   push:
     desc: 'Push the Docker image to the registry'
+    preconditions:
+      - sh: docker version
     cmds:
       - docker tag {{.IMAGE_NAME}} {{.REGISTRY}}/{{.IMAGE_NAME}}:latest
       - docker push {{.REGISTRY}}/{{.IMAGE_NAME}}:latest
 
   imagerun:
     desc: 'run docker container from local to image'
+    preconditions:
+      - sh: docker version
     cmds:
       - docker run --rm --name {{.IMAGE_NAME}} -p 3000:3000 {{.IMAGE_NAME}}
+
+  deploy:
+    desc: Build image, push and deploy to NAS2
+    cmds:
+      - task: image
+      - task: push
+      - 'curl -H "Authorization: Bearer lbuHehLxXpWdmpWhEoX4" 10.0.0.4:5050/v1/update'
