@@ -1,5 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
+
+const AppError = require('./utils/appError');
+const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
@@ -17,10 +20,6 @@ app.use(express.json()); //milddleware, to loh the body data
 app.use(express.static(`${__dirname}/public`)); //middleware, to serve static files, like html, css, js
 
 app.use((req, res, next) => {
-  console.log('Hello from the middleware');
-  next();
-});
-app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
@@ -33,5 +32,20 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/tours', tourRouter); //middleware, only run for the route with /api/v1/tours
 app.use('/api/v1/users', userRouter);
+
+app.all('*', (req, res, next) => {
+  //method 1 to handle error
+  // res.status(404).json({
+  //   status: 'fail',
+  //   message: `Can't find ${req.originalUrl} on this server!`,
+  // });
+  // const err = new Error(`Can't find ${req.originalUrl} on this server!`);
+  // err.statusCode = 404;
+  // err.status = 'fail';
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
+//express error handling middleware with 4 arguments!
+app.use(globalErrorHandler);
 
 module.exports = app;
