@@ -9,6 +9,10 @@ tasks:
     desc: 'start the dev server'
     cmds:
       - nodemon server.js
+  run:prod:
+    desc: 'start the prod server'
+    cmds:
+      - NODE_ENV=production nodemon server.js
 
   image:
     desc: 'Build the Docker image'
