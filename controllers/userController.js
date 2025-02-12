@@ -1,3 +1,6 @@
+const User = require('../models/userModel');
+const catchAsync = require('../utils/catchAsync');
+
 //checkID middleware
 const checkUser = (req, res, next, val) => {
   console.log(`user id is: ${val}`);
@@ -11,12 +14,17 @@ const checkUser = (req, res, next, val) => {
   next();
 };
 
-const getAllUsers = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
+const getAllUsers = catchAsync(async (req, res, next) => {
+  const users = await User.find();
+
+  res.status(200).json({
+    status: 'success',
+    result: users.length,
+    data: {
+      users,
+    },
   });
-};
+});
 
 const getUser = (req, res) => {
   res.status(500).json({
