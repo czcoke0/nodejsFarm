@@ -55,6 +55,14 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+//middleware to update passwordChangedAt property
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next(); //if password is not modified or is new, return next
+
+  this.passwordChangedAt = Date.now() - 1000; //1 sec before the token is created
+  next();
+});
+
 //instance method- available on all documents of a certain collection
 userSchema.methods.correctPassword = async function (
   candidatePassword,
