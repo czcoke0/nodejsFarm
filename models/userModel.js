@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator: function (el) {
         return el === this.password;
-      }, //only works on SAVE and CREATE, not UPDATE
+      }, //only works on SAVE and CREATE, not UPDATE, cuz mongoose doesn't have access to the passwordConfirm field
       message: 'Passwords are not the same!',
     },
   },
