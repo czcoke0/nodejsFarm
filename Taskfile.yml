@@ -9,6 +9,7 @@ tasks:
     desc: 'start the dev server'
     cmds:
       - nodemon server.js
+
   run:prod:
     desc: 'start the prod server'
     cmds:
