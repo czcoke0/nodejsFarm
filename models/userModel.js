@@ -40,6 +40,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date, //for password reset
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false, //user is active by default and will not be shown in any output
+  },
 });
 
 //between getting the data and saving it to the database-mw
@@ -60,6 +65,13 @@ userSchema.pre('save', function (next) {
   if (!this.isModified('password') || this.isNew) return next(); //if password is not modified or is new, return next
 
   this.passwordChangedAt = Date.now() - 1000; //1 sec before the token is created
+  next();
+});
+
+//sth will happen before the find query is executed
+userSchema.pre(/^find/, function (next) {
+  //this points to the current query
+  this.find({ active: { $ne: false } }); //not equal to false
   next();
 });
 
